@@ -1,2 +1,2 @@
 # meixner
-A tool for practicing the Meixner-method for first grade students
+This is a tool to practice the Meixner-method with first grade students
