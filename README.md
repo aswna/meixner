@@ -1,7 +1,10 @@
 # Overview / Leírás
-This tool helps the reading practice of syllables taking into account the learning order of the alphabet used by the Meixner-method.
+This tool helps the reading practice of syllables
+taking into account the learning order of the alphabet
+used by the Meixner-method.
 
-Ez az eszköz a szótagolva olvasását segíti, figyelembe vevé a Meixner-módszer ábécéjének tanulási sorrendjét.
+Ez az eszköz a szótagolva olvasását segíti,
+figyelembe vevé a Meixner-módszer ábécéjének tanulási sorrendjét.
 
 ```
 $ ./meixner.py --help

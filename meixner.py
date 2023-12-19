@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 
 """
-This is a tool to practice the Meixner-method with first grade students.
+This tool helps the reading practice of syllables.
 
-Supports lower case letters only.
+It takes into account the learning order of the alphabet used by the
+Meixner-method.
+
+It supports lowercase letters only.
 """
 
 import argparse
 import random
 import sys
 
-import termtables
+USE_TERMTABLE = True
+try:
+    import termtables
+except ModuleNotFoundError:
+    USE_TERMTABLE = False
+    print('Try to install termtables for prettier output!', file=sys.stderr)
 
 MEIXNER_VOWELS = (
     ('a', 'i', 'ó'),
@@ -57,7 +65,12 @@ def main():
         words[i * max_col:(i + 1) * max_col]
         for i in range((len(words) + max_col - 1) // max_col)
     ]
-    termtables.print(word_matrix)
+
+    if USE_TERMTABLE:
+        termtables.print(word_matrix)
+    else:
+        for row in word_matrix:
+            print('\t'.join(map(str, row)))
 
 
 def parse_args():
@@ -107,9 +120,6 @@ def get_letter_pools(args):
 
     consonants_pool = list(consonants_pool)
     vowels_pool = list(vowels_pool)
-
-    # print(f'consonants_pool = {consonants_pool}')
-    # print(f'vowels_pool = {vowels_pool}')
 
     return (consonants_pool, vowels_pool)
 
