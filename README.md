@@ -7,19 +7,18 @@ Ez az eszköz a szótagolva olvasását segíti,
 figyelembe vevé a Meixner-módszer ábécéjének tanulási sorrendjét.
 
 ```
-$ ./meixner.py --help
 usage: meixner.py [-h] [--number-of-letters NUMBER_OF_LETTERS] [--level LEVEL] [--reverse] [--mixed]
                   [--max-cols MAX_COLS] [--max-rows MAX_ROWS]
 
 options:
   -h, --help            show this help message and exit
   --number-of-letters NUMBER_OF_LETTERS
-                        number of letters in word
-  --level LEVEL         level
-  --reverse             reverse
-  --mixed               mixed
-  --max-cols MAX_COLS   max number of columns
-  --max-rows MAX_ROWS   max number of rows
+                        number of letters in word (default: 2)
+  --level LEVEL         level (default: 0)
+  --reverse             reverse (default: False)
+  --mixed               mixed (default: False)
+  --max-cols MAX_COLS   max number of columns (default: 0)
+  --max-rows MAX_ROWS   max number of rows (default: 0)
 ```
 
 # Example / Példa
