@@ -82,8 +82,10 @@ def parse_args():
                         default=2,
                         help="number of letters in word")
     parser.add_argument("--level", type=int, default=0, help="level")
-    parser.add_argument("--reverse", action='store_true', help="reverse")
-    parser.add_argument("--mixed", action='store_true', help="mixed")
+    parser.add_argument("--reverse", action='store_true', help="vowels first")
+    parser.add_argument("--mix", action='store_true',
+                        help="starting letters can be vowels and consonants, "
+                             "too")
     parser.add_argument("--max-cols",
                         type=int,
                         default=0,
@@ -96,7 +98,11 @@ def parse_args():
 
     if args.number_of_letters < 2 or args.number_of_letters > 3:
         print('Invalid number of letters: {args.number_of_letters}')
-        sys.exit(1)
+        sys.exit(2)
+
+    if args.reverse and args.mix:
+        print('--reverse and --mix are mutually exclusive options!')
+        sys.exit(2)
 
     return args
 
@@ -149,33 +155,12 @@ def generate_words(args, consonants_pool, vowels_pool, size):
 
     i = 0
     while i < size:
-        consonant = random.choice(consonants_pool)
-        vowel = random.choice(vowels_pool)
-        word = None
-        if args.mixed:
-            if random.choice((True, False)):
-                word = f'{vowel}{consonant}'
-                if args.number_of_letters == 3:
-                    vowel2 = random.choice(vowels_pool)
-                    word = f'{vowel}{consonant}{vowel2}'
-            else:
-                word = f'{consonant}{vowel}'
-                if args.number_of_letters == 3:
-                    consonant2 = random.choice(consonants_pool)
-                    word = f'{consonant}{vowel}{consonant2}'
+        if args.mix:
+            word = generate_mixed_word(args, consonants_pool, vowels_pool)
         elif args.reverse:
-            word = f'{vowel}{consonant}'
-            if args.number_of_letters == 3:
-                vowel2 = random.choice(vowels_pool)
-                word = f'{vowel}{consonant}{vowel2}'
+            word = generate_reversed_word(args, consonants_pool, vowels_pool)
         else:
-            word = f'{consonant}{vowel}'
-            if args.number_of_letters == 3:
-                consonant2 = random.choice(consonants_pool)
-                word = f'{consonant}{vowel}{consonant2}'
-
-        if not word:
-            sys.exit('Internal error - no word')
+            word = generate_word(args, consonants_pool, vowels_pool)
 
         if word in words_already_generated:
             continue
@@ -185,6 +170,52 @@ def generate_words(args, consonants_pool, vowels_pool, size):
         i += 1
 
     return words
+
+
+def generate_mixed_word(args, consonants_pool, vowels_pool):
+    """Generate word according to mixed rule."""
+    consonant1 = random.choice(consonants_pool)
+    vowel1 = random.choice(vowels_pool)
+    if random.choice((True, False)):
+        if args.number_of_letters == 2:
+            word = f'{vowel1}{consonant1}'
+        else:
+            vowel2 = random.choice(vowels_pool)
+            word = f'{vowel1}{consonant1}{vowel2}'
+    else:
+        if args.number_of_letters == 2:
+            word = f'{consonant1}{vowel1}'
+        else:
+            consonant2 = random.choice(consonants_pool)
+            word = f'{consonant1}{vowel1}{consonant2}'
+
+    return word
+
+
+def generate_reversed_word(args, consonants_pool, vowels_pool):
+    """Generate word according to reverse rule."""
+    consonant1 = random.choice(consonants_pool)
+    vowel1 = random.choice(vowels_pool)
+    if args.number_of_letters == 2:
+        word = f'{vowel1}{consonant1}'
+    else:
+        vowel2 = random.choice(vowels_pool)
+        word = f'{vowel1}{consonant1}{vowel2}'
+
+    return word
+
+
+def generate_word(args, consonants_pool, vowels_pool):
+    """Generate word according to default rule."""
+    consonant1 = random.choice(consonants_pool)
+    vowel1 = random.choice(vowels_pool)
+    if args.number_of_letters == 2:
+        word = f'{consonant1}{vowel1}'
+    else:
+        consonant2 = random.choice(consonants_pool)
+        word = f'{consonant1}{vowel1}{consonant2}'
+
+    return word
 
 
 if __name__ == '__main__':
