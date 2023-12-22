@@ -55,15 +55,21 @@ def main():
 
     (consonants_pool, vowels_pool) = get_letter_pools(args)
 
-    (max_row, max_col) = get_size(args, consonants_pool, vowels_pool)
+    (max_rows, max_cols) = get_size(args, consonants_pool, vowels_pool)
 
-    words = generate_words(args,
-                           consonants_pool,
-                           vowels_pool,
-                           max_row * max_col)
+    if args.fix:
+        words = generate_fixed_words(consonants_pool,
+                                     vowels_pool,
+                                     max_rows,
+                                     max_cols)
+    else:
+        words = generate_words(args,
+                               consonants_pool,
+                               vowels_pool,
+                               max_rows * max_cols)
     word_matrix = [
-        words[i * max_col:(i + 1) * max_col]
-        for i in range((len(words) + max_col - 1) // max_col)
+        words[i * max_cols:(i + 1) * max_cols]
+        for i in range((len(words) + max_cols - 1) // max_cols)
     ]
 
     if USE_TERMTABLE:
@@ -83,6 +89,8 @@ def parse_args():
                         help="number of letters in word")
     parser.add_argument("--level", type=int, default=0, help="level")
     parser.add_argument("--reverse", action='store_true', help="vowels first")
+    parser.add_argument("--fix", action='store_true',
+                        help="print an ordered table")
     parser.add_argument("--mix", action='store_true',
                         help="starting letters can be vowels and consonants, "
                              "too")
@@ -97,12 +105,14 @@ def parse_args():
     args = parser.parse_args()
 
     if args.number_of_letters < 2 or args.number_of_letters > 3:
-        print('Invalid number of letters: {args.number_of_letters}')
-        sys.exit(2)
+        sys.exit('Invalid number of letters: {args.number_of_letters}')
 
-    if args.reverse and args.mix:
-        print('--reverse and --mix are mutually exclusive options!')
-        sys.exit(2)
+    if (all([args.reverse, args.mix]) or all([args.fix and args.reverse]) or
+            all([args.fix and args.mix])):
+        sys.exit('--reverse, --mix, and --fix are mutually exclusive options!')
+
+    if args.fix and args.number_of_letters != 2:
+        sys.exit('For now --fix is supported with 2-letter words only!')
 
     return args
 
@@ -128,33 +138,46 @@ def get_letter_pools(args):
     consonants_pool = list(consonants_pool)
     vowels_pool = list(vowels_pool)
 
+    random.shuffle(consonants_pool)
+    random.shuffle(vowels_pool)
+
     return (consonants_pool, vowels_pool)
 
 
 def get_size(args, consonants_pool, vowels_pool):
     """Get number of strings to generate."""
-    max_row = (min(len(consonants_pool) - 1, 5) if args.level <= 0
-               else min(args.level + 1, 5))
-
+    max_rows = min(len(consonants_pool), 7)
     if args.max_rows > 0:
-        max_row = min(max_row, args.max_rows)
+        max_rows = min(max_rows, args.max_rows)
 
-    max_col = (min(len(vowels_pool) - 1, 5) if args.level <= 0
-               else min(args.level + 2, 5))
-
+    max_cols = min(len(vowels_pool), 5)
     if args.max_cols > 0:
-        max_col = min(max_col, args.max_cols)
+        max_cols = min(max_cols, args.max_cols)
 
-    return (max_row, max_col)
+    return (max_rows, max_cols)
+
+
+def generate_fixed_words(consonants_pool,
+                         vowels_pool,
+                         max_rows,
+                         max_cols):
+    """Generate words according to fixed configuration."""
+    words = []
+    for i in range(min(len(consonants_pool), max_rows)):
+        for j in range(min(len(vowels_pool), max_cols)):
+            words.append(f'{consonants_pool[j]}{vowels_pool[i]}')
+    return words
 
 
 def generate_words(args, consonants_pool, vowels_pool, size):
-    """Generate words according to configuration."""
+    """Generate words according to non-fixed configuration."""
     words = []
     words_already_generated = set()
 
     i = 0
     while i < size:
+        random.shuffle(consonants_pool)
+        random.shuffle(vowels_pool)
         if args.mix:
             word = generate_mixed_word(args, consonants_pool, vowels_pool)
         elif args.reverse:
@@ -174,19 +197,19 @@ def generate_words(args, consonants_pool, vowels_pool, size):
 
 def generate_mixed_word(args, consonants_pool, vowels_pool):
     """Generate word according to mixed rule."""
-    consonant1 = random.choice(consonants_pool)
-    vowel1 = random.choice(vowels_pool)
+    consonant1 = consonants_pool[0]
+    vowel1 = vowels_pool[0]
     if random.choice((True, False)):
         if args.number_of_letters == 2:
             word = f'{vowel1}{consonant1}'
         else:
-            vowel2 = random.choice(vowels_pool)
+            vowel2 = vowels_pool[1]
             word = f'{vowel1}{consonant1}{vowel2}'
     else:
         if args.number_of_letters == 2:
             word = f'{consonant1}{vowel1}'
         else:
-            consonant2 = random.choice(consonants_pool)
+            consonant2 = consonants_pool[1]
             word = f'{consonant1}{vowel1}{consonant2}'
 
     return word
@@ -194,12 +217,12 @@ def generate_mixed_word(args, consonants_pool, vowels_pool):
 
 def generate_reversed_word(args, consonants_pool, vowels_pool):
     """Generate word according to reverse rule."""
-    consonant1 = random.choice(consonants_pool)
-    vowel1 = random.choice(vowels_pool)
+    consonant1 = consonants_pool[0]
+    vowel1 = vowels_pool[0]
     if args.number_of_letters == 2:
         word = f'{vowel1}{consonant1}'
     else:
-        vowel2 = random.choice(vowels_pool)
+        vowel2 = vowels_pool[1]
         word = f'{vowel1}{consonant1}{vowel2}'
 
     return word
@@ -207,12 +230,12 @@ def generate_reversed_word(args, consonants_pool, vowels_pool):
 
 def generate_word(args, consonants_pool, vowels_pool):
     """Generate word according to default rule."""
-    consonant1 = random.choice(consonants_pool)
-    vowel1 = random.choice(vowels_pool)
+    consonant1 = consonants_pool[0]
+    vowel1 = vowels_pool[0]
     if args.number_of_letters == 2:
         word = f'{consonant1}{vowel1}'
     else:
-        consonant2 = random.choice(consonants_pool)
+        consonant2 = consonants_pool[1]
         word = f'{consonant1}{vowel1}{consonant2}'
 
     return word

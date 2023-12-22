@@ -7,8 +7,8 @@ Ez az eszköz a szótagolva olvasását segíti,
 figyelembe vevé a Meixner-módszer ábécéjének tanulási sorrendjét.
 
 ```
-usage: meixner.py [-h] [--number-of-letters NUMBER_OF_LETTERS] [--level LEVEL] [--reverse] [--mix]
-                  [--max-cols MAX_COLS] [--max-rows MAX_ROWS]
+usage: meixner.py [-h] [--number-of-letters NUMBER_OF_LETTERS] [--level LEVEL] [--reverse] [--fix]
+                  [--mix] [--max-cols MAX_COLS] [--max-rows MAX_ROWS]
 
 options:
   -h, --help            show this help message and exit
@@ -16,6 +16,7 @@ options:
                         number of letters in word (default: 2)
   --level LEVEL         level (default: 0)
   --reverse             vowels first (default: False)
+  --fix                 print an ordered table (default: False)
   --mix                 starting letters can be vowels and consonants, too (default: False)
   --max-cols MAX_COLS   max number of columns (default: 0)
   --max-rows MAX_ROWS   max number of rows (default: 0)
@@ -23,6 +24,15 @@ options:
 
 # Example / Példa
 ```
+$ ./meixner.py --level 2 --fix --max-cols 4 --max-rows 3
+┌────┬────┬────┬────┐
+│ ló │ tó │ mó │ só │
+├────┼────┼────┼────┤
+│ li │ ti │ mi │ si │
+├────┼────┼────┼────┤
+│ le │ te │ me │ se │
+└────┴────┴────┴────┘
+
 $ ./meixner.py --number-of-letters 2 --level 3 --max-cols 3 --max-rows 2
 ┌────┬────┬────┐
 │ ve │ va │ ca │
