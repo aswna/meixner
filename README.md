@@ -3,8 +3,8 @@ This tool helps the reading practice of syllables
 taking into account the learning order of the alphabet
 used by the Meixner-method.
 
-Ez az eszköz a szótagolva olvasását segíti,
-figyelembe vevé a Meixner-módszer ábécéjének tanulási sorrendjét.
+Ez az eszköz -- a Meixner-módszer ábécéjének tanulási sorrendjét
+figyelembe véve -- segíti a szótagolva olvasást.
 
 ```
 usage: meixner.py [-h] [--number-of-letters NUMBER_OF_LETTERS] [--level LEVEL] [--reverse] [--fix]
@@ -32,6 +32,15 @@ $ ./meixner.py --level 2 --fix --max-cols 4 --max-rows 3
 ├────┼────┼────┼────┤
 │ le │ te │ me │ se │
 └────┴────┴────┴────┘
+
+$ ./meixner.py --number-of-letters 3 --level 2 --fix --reverse --max-cols 4 --max-rows 3
+┌─────┬─────┬─────┬─────┐
+│ úmi │ emi │ ami │ ómi │
+├─────┼─────┼─────┼─────┤
+│ úti │ eti │ ati │ óti │
+├─────┼─────┼─────┼─────┤
+│ úli │ eli │ ali │ óli │
+└─────┴─────┴─────┴─────┘
 
 $ ./meixner.py --number-of-letters 2 --level 3 --max-cols 3 --max-rows 2
 ┌────┬────┬────┐

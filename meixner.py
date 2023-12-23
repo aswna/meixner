@@ -58,7 +58,8 @@ def main():
     (max_rows, max_cols) = get_size(args, consonants_pool, vowels_pool)
 
     if args.fix:
-        words = generate_fixed_words(consonants_pool,
+        words = generate_fixed_words(args,
+                                     consonants_pool,
                                      vowels_pool,
                                      max_rows,
                                      max_cols)
@@ -107,12 +108,8 @@ def parse_args():
     if args.number_of_letters < 2 or args.number_of_letters > 3:
         sys.exit('Invalid number of letters: {args.number_of_letters}')
 
-    if (all([args.reverse, args.mix]) or all([args.fix and args.reverse]) or
-            all([args.fix and args.mix])):
-        sys.exit('--reverse, --mix, and --fix are mutually exclusive options!')
-
-    if args.fix and args.number_of_letters != 2:
-        sys.exit('For now --fix is supported with 2-letter words only!')
+    if args.mix and (args.reverse or args.fix):
+        sys.exit('--mix and --fix/--reverse are mutually exclusive options!')
 
     return args
 
@@ -157,15 +154,31 @@ def get_size(args, consonants_pool, vowels_pool):
     return (max_rows, max_cols)
 
 
-def generate_fixed_words(consonants_pool,
+def generate_fixed_words(args,
+                         consonants_pool,
                          vowels_pool,
                          max_rows,
                          max_cols):
     """Generate words according to fixed configuration."""
     words = []
+    consonants_pool2 = list(consonants_pool)
+    random.shuffle(consonants_pool2)
+    vowels_pool2 = list(vowels_pool)
+    random.shuffle(vowels_pool2)
     for i in range(min(len(consonants_pool), max_rows)):
         for j in range(min(len(vowels_pool), max_cols)):
-            words.append(f'{consonants_pool[j]}{vowels_pool[i]}')
+            if args.number_of_letters == 2:
+                if args.reverse:
+                    words.append(f'{vowels_pool[j]}{consonants_pool[i]}')
+                else:
+                    words.append(f'{consonants_pool[j]}{vowels_pool[i]}')
+            else:
+                if args.reverse:
+                    words.append(f'{vowels_pool[j]}{consonants_pool[i]}'
+                                 f'{vowels_pool2[0]}')
+                else:
+                    words.append(f'{consonants_pool[j]}{vowels_pool[i]}'
+                                 f'{consonants_pool2[0]}')
     return words
 
 
