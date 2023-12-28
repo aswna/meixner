@@ -84,25 +84,32 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--number-of-letters",
+    parser.add_argument('--number-of-letters',
                         type=int,
                         default=2,
-                        help="number of letters in word")
-    parser.add_argument("--level", type=int, default=0, help="level")
-    parser.add_argument("--reverse", action='store_true', help="vowels first")
-    parser.add_argument("--fix", action='store_true',
-                        help="print an ordered table")
-    parser.add_argument("--mix", action='store_true',
-                        help="starting letters can be vowels and consonants, "
-                             "too")
-    parser.add_argument("--max-cols",
+                        help='number of letters in word')
+    parser.add_argument('--level',
                         type=int,
                         default=0,
-                        help="max number of columns")
-    parser.add_argument("--max-rows",
+                        help='level')
+    parser.add_argument('--reverse', '--reversed',
+                        action='store_true',
+                        help='vowels first')
+    parser.add_argument('--fix', '--fixed',
+                        action='store_true',
+                        help='print an ordered table')
+    parser.add_argument('--mix', '--mixed',
+                        action='store_true',
+                        help='starting letters can be vowels and consonants, '
+                             'too')
+    parser.add_argument('--max-cols',
                         type=int,
                         default=0,
-                        help="max number of rows")
+                        help='max number of columns')
+    parser.add_argument('--max-rows',
+                        type=int,
+                        default=0,
+                        help='max number of rows')
     args = parser.parse_args()
 
     if args.number_of_letters < 2 or args.number_of_letters > 3:
