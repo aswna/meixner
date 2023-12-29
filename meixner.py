@@ -94,14 +94,13 @@ def parse_args():
                         help='level')
     parser.add_argument('--reverse', '--reversed',
                         action='store_true',
-                        help='vowels first')
+                        help='first letters will be vowels')
     parser.add_argument('--fix', '--fixed',
                         action='store_true',
                         help='print an ordered table')
     parser.add_argument('--mix', '--mixed',
                         action='store_true',
-                        help='starting letters can be vowels and consonants, '
-                             'too')
+                        help='first letters can be vowels, too')
     parser.add_argument('--max-cols',
                         type=int,
                         default=0,

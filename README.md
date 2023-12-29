@@ -7,6 +7,7 @@ Ez az eszköz -- a Meixner-módszer ábécéjének tanulási sorrendjét
 figyelembe véve -- segíti a szótagolva olvasást.
 
 ```
+$ ./meixner.py --help
 usage: meixner.py [-h] [--number-of-letters NUMBER_OF_LETTERS] [--level LEVEL] [--reverse] [--fix]
                   [--mix] [--max-cols MAX_COLS] [--max-rows MAX_ROWS]
 
@@ -15,9 +16,10 @@ options:
   --number-of-letters NUMBER_OF_LETTERS
                         number of letters in word (default: 2)
   --level LEVEL         level (default: 0)
-  --reverse             vowels first (default: False)
-  --fix                 print an ordered table (default: False)
-  --mix                 starting letters can be vowels and consonants, too (default: False)
+  --reverse, --reversed
+                        first letters will be vowels (default: False)
+  --fix, --fixed        print an ordered table (default: False)
+  --mix, --mixed        first letters can be vowels, too (default: False)
   --max-cols MAX_COLS   max number of columns (default: 0)
   --max-rows MAX_ROWS   max number of rows (default: 0)
 ```
