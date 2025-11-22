@@ -91,7 +91,7 @@ def parse_args():
     parser.add_argument('--level',
                         type=int,
                         default=0,
-                        help='level')
+                        help='difficulty level according to the Meixner-method')
     parser.add_argument('--reverse', '--reversed',
                         action='store_true',
                         help='first letters will be vowels')
