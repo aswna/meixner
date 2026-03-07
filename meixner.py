@@ -13,11 +13,11 @@ import argparse
 import random
 import sys
 
-USE_TERMTABLE = True
+use_termtable = True
 try:
     import termtables
 except ModuleNotFoundError:
-    USE_TERMTABLE = False
+    use_termtable = False
     print('Try to install termtables for prettier output!', file=sys.stderr)
 
 MEIXNER_VOWELS = (
@@ -73,7 +73,7 @@ def main():
         for i in range((len(words) + max_cols - 1) // max_cols)
     ]
 
-    if USE_TERMTABLE:
+    if use_termtable:
         termtables.print(word_matrix)
     else:
         for row in word_matrix:
