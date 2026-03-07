@@ -13,11 +13,11 @@ import argparse
 import random
 import sys
 
-use_termtable = True
+USE_TERMTABLE = True # pylint: disable=invalid-name
 try:
     import termtables
 except ModuleNotFoundError:
-    use_termtable = False
+    USE_TERMTABLE = False # pylint: disable=invalid-name
     print('Try to install termtables for prettier output!', file=sys.stderr)
 
 MEIXNER_VOWELS = (
@@ -73,7 +73,7 @@ def main():
         for i in range((len(words) + max_cols - 1) // max_cols)
     ]
 
-    if use_termtable:
+    if USE_TERMTABLE:
         termtables.print(word_matrix)
     else:
         for row in word_matrix:
